@@ -3,9 +3,9 @@ from datetime import datetime
 from termcolor import colored
 
 ##Function for creating AMI's
-def create_image(instance):
+def create_image(instance,name):
     image = instance.create_image(
-        Name='ami_backup_{0}_{1}'.format(instance.id, datetime.now().strftime('%Y-%m-%d_%H-%M')),
+        Name=str(name) +'_{0}_{1}'.format(instance.id, datetime.now().strftime('%Y-%m-%d_%H-%M')),
         Description='string',
         NoReboot=True,
     )
@@ -37,7 +37,13 @@ def get_list_images(instance):
     image_dates = {image.image_id: image.creation_date for image in images}
 
     return images
-
+#Get instance name
+def get_instances_name(instance):
+    names = []
+    for tag in instance.tags:
+        if tag['Key'] == 'Name':
+            names.append(tag['Value'])
+    return names
 
 #Function for getting instances that should be backuped
 def get_instances():
@@ -65,7 +71,7 @@ ec2 = boto3.resource('ec2',
                          )
 
 for i in get_instances():
-    create_image(i)
-    for item in get_list_images(i):
-        print (colored(item, 'green'))
+        create_image(i,get_instances_name(i))
+        for item in get_list_images(i):
+            print (colored(item, 'green'))
 
