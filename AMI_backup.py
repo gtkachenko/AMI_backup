@@ -121,8 +121,8 @@ for i in get_instances():
         time.sleep(120)
         redundant_images = get_redundant_images(i,get_instances_name(i))
         delete_redundant_images(redundant_images)
-        print('AWS need sime time during AMI will be deleted so we get list of all available AMI it takes one minutes by default')
-        time.sleep(60)
+        print('AWS need sime time during AMI will be deleted so we get list of all available AMI it takes two minutes by default')
+        time.sleep(120)
         list_amis = get_list_images(i, get_instances_name(i))
         oldest_ami, new_ami = list_amis[-1],list_amis[0]
         print ('The oldest  AMI is: ' + colored(oldest_ami, 'red'))
